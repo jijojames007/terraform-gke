@@ -36,7 +36,29 @@ resource "google_container_cluster" "k8sexample" {
   ip_allocation_policy {
 	use_ip_aliases    = true
         }
-#}
+}
+
+# CREATE A NODE POOL ###################################################################
+
+resource "google_container_node_pool" "node_pool" {
+  provider = "google"
+  name     = "private-pool"
+  project  = "${var.gcp_project}"
+#  location = "${var.gcp_region}"
+  zone     = "${var.gcp_zone}"
+  cluster  = "${var.cluster-name}"
+  initial_node_count = "1"
+
+  autoscaling {
+    min_node_count = "1"
+    max_node_count = "2"
+  }
+
+#  management {
+#    auto_repair  = "true"
+#    auto_upgrade = "true"
+#  }
+
   node_config {
     image_type   = "COS"
     machine_type = "${var.node_machine_type}"
@@ -63,6 +85,8 @@ resource "google_container_cluster" "k8sexample" {
     disk_type    = "pd-standard"
     preemptible  = false
 
+#    service_account = module.gke_service_account.email
+ 
 
     timeouts {
     create = "30m"
@@ -70,5 +94,4 @@ resource "google_container_cluster" "k8sexample" {
     delete = "30m"
   }
  }
-# CREATE A NODE POOL ###################################################################
 }

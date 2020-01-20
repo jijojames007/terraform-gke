@@ -13,6 +13,11 @@ variable "gcp_project" {
   default = "kubernetes-testing-265312"
 }
 
+variable "cluster-name" {
+  description = "GCP project name"
+  default = "k8s-cluster"
+}
+
 variable "initial_node_count" {
   description = "Number of worker VMs to initially create"
   default = 1
